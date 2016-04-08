@@ -54,7 +54,7 @@ def bb_temperature(wavelength, radiance, epsilon=1e-8):
         # wavelength and the new temperature. Then recalculate the radiance of
         # the blackbody object.
         temperature = (highTemp + lowTemp)/2
-        blackbody= radiometry.Blackbody(wavelength, temperature)
+        blackbody = radiometry.Blackbody(wavelength, temperature)
         currentRadiance = blackbody.radiance()
         
         # If new radiance is greater than old, the high bound of the search is
