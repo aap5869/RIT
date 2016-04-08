@@ -1,5 +1,4 @@
-from math import exp
-from math import pi
+import radiometry
 
 def bb_temperature(wavelength, radiance, epsilon=1e-8):
 
@@ -44,61 +43,30 @@ def bb_temperature(wavelength, radiance, epsilon=1e-8):
 
     """
     # Define the bounds of the binary search. Units are in Kelvin
-    low_temp = 0
-    high_temp = 6000
+    lowTemp = 0
+    highTemp = 6000
 
     # Begin binary search. Stop if the high bound minus the low bound is less
     # than the wanted error precision.
-    while (high_temp - low_temp) > epsilon:
+    while (highTemp - lowTemp) > epsilon:
         
-        # Find middle of bounds and calculate new radiance.
-        temperature = (high_temp + low_temp)/2
-        current_radiance = planck_bb_eq(wavelength, temperature)
+        # Find middle of bounds and redefine a blackbody object with specified
+        # wavelength and the new temperature. Then recalculate the radiance of
+        # the blackbody object.
+        temperature = (highTemp + lowTemp)/2
+        blackbody= radiometry.Blackbody(wavelength, temperature)
+        currentRadiance = blackbody.radiance()
         
         # If new radiance is greater than old, the high bound of the search is
         # set to the newly computed temperature. Else the low bound of the 
         # search is set to the computed temperature.
-        if current_radiance > radiance:
-            high_temp = temperature
+        if currentRadiance > radiance:
+            highTemp = temperature
         else:
-            low_temp = temperature
+            lowTemp = temperature
 
     # Return the temperature of the blackbody
     return temperature
-
-
-def planck_bb_eq(wavelength, temperature):
-
-    """
-    description::
-        This method will compute the radiance of a blackbody at a specified
-        wavelength and temperature using Planck's blackbody equation.
-
-    attributes::
-        wavelength
-            (float) The wavelength the blackbody is emitting. Units are in
-            microns.
-
-        temperature
-            (float) The temperature of the blackbody. Units are in Kelvin.
-
-    returns::
-        L
-            (float) The radiance of the blackbody. Units are in 
-            W/m^2/microns/sr.
-    """
-
-    C1 = 3.74151*10**8    # Constant value in W/m^2/micron
-    C2 = 1.43879*10**4    # Constant value in micronK
-
-    # Planck's blackbody equation
-    L = C1 / (pi * wavelength**5)
-    exponent = C2 / (wavelength * temperature)
-    L = L / (exp(exponent) - 1)
-
-    # Return the radiance of the blackbody.
-    # Units are in W/m^2/micron/sr
-    return L
 
 
 if __name__ == '__main__':
@@ -106,7 +74,7 @@ if __name__ == '__main__':
     import radiometry
 
     wavelength = 10 # microns
-    trueTemperature = 300 # Kelvin
+    trueTemperature = 500 # Kelvin
 
     bb = radiometry.Blackbody(wavelength, trueTemperature)
     radiance = bb.radiance()
