@@ -59,15 +59,9 @@ def shuffle_and_deal():
             (list of integers) Player 2's hand of the 26 cards dealt to them
     """
     
-    deck = []
     player1Hand = []
     player2Hand = []
-    cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-    
-    # Create deck of 52 cards
-    for suit in range(4):
-        for card in cards:
-            deck.append(card)
+    deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]*4
 
     # Shuffle the deck
     random.shuffle(deck)
