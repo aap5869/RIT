@@ -100,7 +100,7 @@ def histogram(image, bitDepth=8):
     # the CDF of the image
     for plane in range(planes):
         for x in range(maxCount):
-            cdf[plane][x] = sum(pdf[plane][0:x])
+            cdf[plane][x] = sum(pdf[plane][0:x + 1])
 
     return h, pdf, cdf
 
